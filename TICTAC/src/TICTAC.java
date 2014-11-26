@@ -6,11 +6,9 @@ public class TICTAC extends Thread {
 		TIC tic = new TIC();
 		TAC tac = new TAC();
 		try {
-			tic.sleep(1000);
 			tic.start();
-			tic.sleep(1000);
 			tac.start();
-		} catch (InterruptedException e) {
+		} catch (/*Interrupted*/Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
