@@ -38,34 +38,30 @@ public class Contador extends Applet implements Runnable, ActionListener{
     }
     public void start(){
         System.out.println("start");
-        this.hilo = new threadContador(this.CONTADOR1);
-        this.hilo2 = new threadContador(this.CONTADOR2);
+        this.hilo = new threadContador(this.CONTADOR1,this);
+        this.hilo2 = new threadContador(this.CONTADOR2,this);
         this.hilo.start();
         this.hilo2.start();
         
     }
     public void run(){
-        System.out.println("run");
-        while( ! this.parar ){
-            System.out.println("run recogida");
+        if(this.hilo != null){
             this.CONTADOR1 = this.hilo.getContador();
-            this.CONTADOR2 = this.hilo2.getContador();
-            repaint();
-
         }
-        this.hilo = null;
-        this.hilo2 = null;
-                
+        if(this.hilo2 != null){
+            this.CONTADOR2 = this.hilo2.getContador();
+        }
+        repaint();
     }
     
     public void paint(Graphics g){
+        
         System.out.println("pinta");
         g.drawString("HILO 1: "+Long.toString((long)this.CONTADOR1),80,100);
         g.drawString("HILO 2: "+Long.toString((long)this.CONTADOR2),80,150);
         
         g.setFont(fuente);
         
-
     }
 
 
@@ -74,13 +70,15 @@ public class Contador extends Applet implements Runnable, ActionListener{
 
         if (e.getSource()==b1){//comienzo
             if (hilo.isAlive()){
-                hilo = null;
-                //si el hilo está corriendo y vivo no hago nada
+                this.hilo.stop();
+                this.b1.setLabel("Finalizado 1");
+                
             }
         }
         if (e.getSource()==b2){ //parada
             if (hilo2.isAlive()){
-                hilo2 = null;
+                this.hilo2.stop();
+                this.b2.setLabel("Finalizado 2");
                 //si el hilo está corriendo y vivo no hago nada
             }
         }

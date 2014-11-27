@@ -13,10 +13,12 @@ public class threadContador extends Thread {
     
     private long Contador;
     private Thread hilo; 
+    private Contador appletContador;
     
     
-    public threadContador(long contador){
+    public threadContador(long contador,Contador applet){
         this.Contador = contador;
+        this.appletContador = applet;
     }
     
     public void run() {
@@ -27,6 +29,7 @@ public class threadContador extends Thread {
             try{
                 this.hilo.sleep(1000);
                 this.Contador++;
+                this.appletContador.run();
                 System.out.println(this.Contador);
             }catch (InterruptedException e){
                 e.printStackTrace();
