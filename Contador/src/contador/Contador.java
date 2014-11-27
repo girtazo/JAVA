@@ -19,7 +19,6 @@ public class Contador extends Applet implements Runnable, ActionListener{
     //método init
     public void init(){
         
-        System.out.println("init");
         setBackground(Color.yellow);
 
         //añado botón 1 y su listener
@@ -37,7 +36,6 @@ public class Contador extends Applet implements Runnable, ActionListener{
         
     }
     public void start(){
-        System.out.println("start");
         this.hilo = new threadContador(this.CONTADOR1,this);
         this.hilo2 = new threadContador(this.CONTADOR2,this);
         this.hilo.start();
@@ -56,7 +54,6 @@ public class Contador extends Applet implements Runnable, ActionListener{
     
     public void paint(Graphics g){
         
-        System.out.println("pinta");
         g.drawString("HILO 1: "+Long.toString((long)this.CONTADOR1),80,100);
         g.drawString("HILO 2: "+Long.toString((long)this.CONTADOR2),80,150);
         

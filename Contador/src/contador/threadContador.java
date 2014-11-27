@@ -30,7 +30,6 @@ public class threadContador extends Thread {
                 this.hilo.sleep(1000);
                 this.Contador++;
                 this.appletContador.run();
-                System.out.println(this.Contador);
             }catch (InterruptedException e){
                 e.printStackTrace();
             }
