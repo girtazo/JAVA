@@ -46,7 +46,7 @@ public class Campo extends Applet implements Runnable{
     public void run(){
         while(campo == Thread.currentThread()){
             
-            if(direccion == "derecha"){
+            if(pelota.movimiento == "derecha"){
                 
             } else {
                 

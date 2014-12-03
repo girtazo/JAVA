@@ -18,7 +18,7 @@ public class Pelota extends Thread{
     public int anchura = 50;
     public int x;
     public int y;
-    public String direccion;
+    public String movimiento;
     private Campo campo;
     private boolean libre;
     
@@ -63,14 +63,16 @@ public class Pelota extends Thread{
     }
     
     public void moverDerecha(){
-            x = x+1;
-    }
-    
-    public int getx(){
-    return x;
+        
+        x = x+1;
+        movimiento = "derecha";
+        
     }
     
     public void moverIzquierda() throws InterruptedException{
-            x = x-1;
+        
+        x = x-1;
+        movimiento = "izquierda";
+        
     }
 }
