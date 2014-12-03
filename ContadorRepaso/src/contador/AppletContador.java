@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.applet.*;
 
-public class Contador extends Applet implements Runnable{
+public class AppletContador extends Applet{
 
     //Propiedades
     private threadContador hilo;
@@ -27,40 +27,25 @@ public class Contador extends Applet implements Runnable{
         
     }
     public void start(){
-        this.hilo = new threadContador(1,1);
-        this.hilo2 = new threadContador(5,3);
-        this.hilo3 = new threadContador(10,3);
+        this.hilo = new threadContador(1,1,this);
+        this.hilo2 = new threadContador(5,3,this);
+        this.hilo3 = new threadContador(10,3,this);
         this.hilo.start();
         this.hilo2.start();
+        this.hilo3.start();
         
     }
     public void run(){
-        long contador1;
-       //contador = this.hilo.getContador();
-         // contador = this.hilo2.getContador();
-           //contador = this.hilo3.getContador();
-        System.out.println("entra");
-        contador1=3;
-        while(true){
-            repaint();
-        }
-        
+        repaint();
     }
     public void paint(Graphics g){
         g.setFont(fuente);
         String cadena;
-     
-       
-        cadena= "Hilo1: "+contador1;
-     
-        cadena += " Hilo2: "+contador1;
-       
-        cadena += " Hilo3: "+contador1;
+
+        cadena= "Hilo1: "+this.hilo.getContador();
+        cadena += " Hilo2: "+this.hilo2.getContador();
+        cadena += " Hilo3: "+this.hilo3.getContador();
         g.drawString(cadena,80,100);
-        if(!this.run){
-            this.run = false;
-            this.run();
-        }
     }
 }
 
