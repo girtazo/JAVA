@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  *
  * @author mati
  */
-public class Pelota extends Thread{
+public class Pelota{
     
     public int altura = 50;
     public int anchura = 50;
@@ -30,38 +30,7 @@ public class Pelota extends Thread{
         this.campo = campo;
         this.libre = true;
     }
-    
-    public void run(){
-        try {
-            while(true){
-                
-                while(libre){
-                
-                    sleep(10);
-                    if(campo.getLimitex()[1]>this.x){
-                        moverDerecha();
-                    } else {
-                        libre = false;
-                    }
-                
-                }
-                libre = true;
-                while(libre){
-                    sleep(10);
-                    if(campo.getLimitex()[0]<this.x){
-                        moverIzquierda();
-                    } else {
-                        libre = false;
-                    }
-                }
-                libre = true;
-            }
-            
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Pelota.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
+
     public void moverDerecha(){
         
         x = x+1;
@@ -69,7 +38,7 @@ public class Pelota extends Thread{
         
     }
     
-    public void moverIzquierda() throws InterruptedException{
+    public void moverIzquierda(){
         
         x = x-1;
         movimiento = "izquierda";
