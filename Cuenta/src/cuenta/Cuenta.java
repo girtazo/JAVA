@@ -22,7 +22,7 @@ class Cuenta{
 
 
 	//comprueba se pueda retirar dinero  y lo retira
-	void RetirarDinero(int cant,String nom)
+	synchronized void RetirarDinero(int cant,String nom)
 	{
 		if (getSaldo()>=cant){
 			System.out.println ("Se va a retirar saldo (actual es: "+ getSaldo() +")");
