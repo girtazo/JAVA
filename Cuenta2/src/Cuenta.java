@@ -1,10 +1,10 @@
 
 public class Cuenta{
 	
-	private float maximo;
-	private float saldo;
+	private int maximo;
+	private int saldo;
 	
-	public Cuenta(float max, float sald){
+	public Cuenta(int max, int sald){
 		
 		this.maximo = max;
 		this.saldo = sald;
@@ -16,27 +16,27 @@ public class Cuenta{
 		return saldo;
 	}
 	
-	public synchronized void ingresar(float money , Persona persona  ){
+	public synchronized void ingresar(int money , Persona persona  ){
 		
 		if(money+saldo < maximo){
 			
 			saldo = saldo + money;
-			System.out.println(persona.name +" -> ha intentado ingresado "+money+" y su total de saldo en la cuenta es de"+saldo);
+			System.out.println( persona.name + " -> ha intentado ingresado "+money+" y su total de saldo en la cuenta es de "+saldo);
 			
 		} else {
 			
-			System.out.println(persona.name +" -> ha intentado ingresar "+money+" pero superaba el limite de saldo la cuenta de "+saldo);
+			System.out.println( persona.name + " -> ha intentado ingresar "+money+" pero superaba el limite de saldo la cuenta de "+saldo);
 		
 		}
 		
 	}
 	
-	public synchronized void reintegro(float money , Persona persona  ){
+	public synchronized void reintegro(int money , Persona persona ){
 		
 		if(saldo-money >= 0){
 			
 			saldo = saldo - money;
-			System.out.println(persona.name +" -> ha realizado un reintegro de "+money+" y su total de saldo en la cuenta es de" + saldo);
+			System.out.println(persona.name +" -> ha realizado un reintegro de "+money+" y su total de saldo en la cuenta es de " + saldo);
 			
 		} else {
 			
