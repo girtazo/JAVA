@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 class Cliente {
 	//nombre  máquina y puerto
@@ -7,18 +8,37 @@ class Cliente {
 	static final int PUERTO=5000;
 	public Cliente( ) {
 		try{
+			Scanner scan = new Scanner(System.in);
+			String mensaje;
 			//se crea el socket
 			Socket skCliente = new Socket(HOST, PUERTO);
 
 			//recojo flujo de datos del socket
-			InputStream aux = skCliente.getInputStream();
+			InputStream Inaux = skCliente.getInputStream();
 
 			//asocio flujo de datos flujo de tipo DataInputStream
-			DataInputStream flujo = new DataInputStream( aux );
+			DataInputStream Influjo = new DataInputStream( Inaux );
 			
 			//Capturamos cadena del flujo con readUTF y muestro
-			System.out.println( flujo.readUTF() );
+			System.out.println( Influjo.readUTF() );
 
+			while(true){
+
+				mensaje = scan.nextLine();
+
+				//asocio flujo salida de datos al socket
+				OutputStream Outaux = skCliente.getOutputStream();
+				
+				//asocio flujo de datos flujo de tipo DataOutputStream 
+				DataOutputStream Outflujo = new DataOutputStream( Outaux );
+			
+				Outflujo.writeUTF( mensaje );
+
+				if( mensaje.equalsIgnoreCase("Adios") ){
+					break;
+				}
+
+			}
 			//Cierro el socket
 			skCliente.close();
 		}catch(Exception e) {

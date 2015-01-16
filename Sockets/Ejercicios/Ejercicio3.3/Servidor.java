@@ -6,29 +6,74 @@ class Servidor {
 
 //puerto espera conexiones
 static final int PUERTO=5000;
+String[] mensajes = new String[5];
 
 	public Servidor( ) {
 
 		try {
+			mensajes[0] = "Esperando conexión...";
+			mensajes[1] = "Conectado.";
+			mensajes[2] = "Hola, soy el servidor.";
+			mensajes[3] = "Muy bien.";
+			mensajes[4] =  "Hasta luego";
+			
 			//crea socket y espera
 			ServerSocket skServidor = new ServerSocket( PUERTO );
-			System.out.println("Escucho el puerto " + PUERTO );
+			System.out.println(mensajes[0]);
+			Socket skCliente = skServidor.accept();
+			System.out.println( mensajes[1] );
 
-			while (true){
-				//Primitiva accept() crea nuevo socket skCliente
-				//skCliente atiene al cliente
-				Socket skCliente = skServidor.accept(); // Crea objeto
+			//recojo flujo de datos del socket
+			InputStream in_aux = skCliente.getInputStream();
 
-				System.out.println("Esperando peticiones " );
+			//asocio flujo de datos flujo de tipo DataInputStream
+			DataInputStream in_flujo = new DataInputStream( in_aux );
+
+			System.out.println( in_flujo.readUTF() );
+			
+			//asocio flujo salida de datos al socket
+			OutputStream out_aux = skCliente.getOutputStream();
+				
+			//asocio flujo de datos flujo de tipo DataOutputStream 
+			DataOutputStream out_flujo = new DataOutputStream( out_aux );
+			
+			out_flujo.writeUTF( mensajes[2] );
+
+			while( true ) {
+				
+				//recojo flujo de datos del socket
+				in_aux = skCliente.getInputStream();
+
+				//asocio flujo de datos flujo de tipo DataInputStream
+				in_flujo = new DataInputStream( in_aux );
+
+				String mensaje_client = in_flujo.readUTF();
+				System.out.println( mensaje_client );
+
+
 				//asocio flujo salida de datos al socket
-				OutputStream aux = skCliente.getOutputStream();
+				out_aux = skCliente.getOutputStream();
+				
 				//asocio flujo de datos flujo de tipo DataOutputStream 
-				DataOutputStream flujo= new DataOutputStream( aux );
-				//escribo
-				flujo.writeUTF( "He recibido" );
-				//cierro conexión
-				skCliente.close();
-			}//fin for
+				out_flujo= new DataOutputStream( out_aux );
+				
+				if( mensaje_client != "Adios" ) {
+
+					//escribo
+					out_flujo.writeUTF( mensajes[3] );
+
+				} else {
+
+					//escribo
+					out_flujo.writeUTF( mensajes[4] );
+					
+					//cierro conexión
+					skCliente.close();
+
+				}
+				
+
+			}
 
 		} catch( Exception e ) {
 
@@ -36,12 +81,12 @@ static final int PUERTO=5000;
 
 		}
 
-}
+	}
 
-public static void main( String[] arg ) {
+	public static void main( String[] arg ) {
 
-new Servidor();
+		new Servidor();
 
-}
+	}
 
 }
