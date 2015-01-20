@@ -12,7 +12,15 @@ class Cliente {
 			String mensaje;
 			//se crea el socket
 			Socket skCliente = new Socket(HOST, PUERTO);
+			Scanner lector = new Scanner(System.in);
 
+			//asocio flujo salida de datos al socket
+			OutputStream Outaux = skCliente.getOutputStream();
+				
+			//asocio flujo de datos flujo de tipo DataOutputStream 
+			DataOutputStream Outflujo = new DataOutputStream( Outaux );
+
+			Outflujo.writeUTF( lector.nextLine() );
 			//recojo flujo de datos del socket
 			InputStream Inaux = skCliente.getInputStream();
 
@@ -27,16 +35,32 @@ class Cliente {
 				mensaje = scan.nextLine();
 
 				//asocio flujo salida de datos al socket
-				OutputStream Outaux = skCliente.getOutputStream();
+				Outaux = skCliente.getOutputStream();
 				
 				//asocio flujo de datos flujo de tipo DataOutputStream 
-				DataOutputStream Outflujo = new DataOutputStream( Outaux );
+				Outflujo = new DataOutputStream( Outaux );
 			
 				Outflujo.writeUTF( mensaje );
 
-				if( mensaje.equalsIgnoreCase("Adios") ){
+				if( mensaje.equalsIgnoreCase( "Adios" ) ) {
+
+					Inaux = skCliente.getInputStream();
+
+					//asocio flujo de datos flujo de tipo DataInputStream
+					Influjo = new DataInputStream( Inaux );
+			
+					//Capturamos cadena del flujo con readUTF y muestro
+					System.out.println( Influjo.readUTF() );
 					break;
+
 				}
+				Inaux = skCliente.getInputStream();
+
+				//asocio flujo de datos flujo de tipo DataInputStream
+				Influjo = new DataInputStream( Inaux );
+			
+				//Capturamos cadena del flujo con readUTF y muestro
+				System.out.println( Influjo.readUTF() );
 
 			}
 			//Cierro el socket

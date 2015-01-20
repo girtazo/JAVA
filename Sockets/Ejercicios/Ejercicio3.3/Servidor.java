@@ -57,18 +57,18 @@ String[] mensajes = new String[5];
 				//asocio flujo de datos flujo de tipo DataOutputStream 
 				out_flujo= new DataOutputStream( out_aux );
 				
-				if( mensaje_client != "Adios" ) {
+				if( mensaje_client.equalsIgnoreCase( "Adios" ) ) {
 
-					//escribo
-					out_flujo.writeUTF( mensajes[3] );
-
-				} else {
-
-					//escribo
 					out_flujo.writeUTF( mensajes[4] );
 					
 					//cierro conexión
 					skCliente.close();
+
+				} else {
+
+					out_flujo.writeUTF( mensajes[3] );
+					//escribo
+					
 
 				}
 				
