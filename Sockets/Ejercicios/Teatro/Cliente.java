@@ -10,6 +10,7 @@ class Cliente {
 	private Socket conexion;
 	private String mensaje = "";
 	private String respuesta = "";
+	
 	public Cliente( ) {
 
 		try{
@@ -26,8 +27,8 @@ class Cliente {
 
 	public void realizarConexion(){
 
-		escritura("Hola");
-		lectura();
+		escritura("Hola",true);
+		lectura(true);
 	}
 
 	public void interaccion(){
@@ -35,16 +36,20 @@ class Cliente {
 		
 			while(true){
 
+				//Visualizar Menu
+				lectura(false);
+				
+				// Dar Orden
 				mensaje = lector.nextLine();
-
-				escritura(mensaje);
-				respuesta = lectura();
+				escritura(mensaje,false);
 
 				if( mensaje.equalsIgnoreCase( "Fin" ) ) {
-
-					conexion.close();
+					// Recibir mensaje de Fin
+					lectura(true);
 					break;
-
+				} else {
+					// Recibir Respuesta
+					lectura(false);
 				}
 			}
 		}catch( Exception e ) {
@@ -52,14 +57,20 @@ class Cliente {
 			System.out.println( e.getMessage() );
 		}
 	}
-	public String lectura() {
+
+	public String lectura(Boolean q) {
 
 		try {
 
 			InputStream input = this.conexion.getInputStream();
 			DataInputStream dataInput = new DataInputStream( input );
-			mensaje = dataInput.readUTF();
-			System.out.println("Servidor: " + mensaje);
+			String mensaje = dataInput.readUTF();
+			if(q){
+				System.out.println("Servidor: " + mensaje);
+			} else {
+				System.out.print(mensaje);
+			}
+			
 		}catch( Exception e ) {
 
 			System.out.println( e.getMessage() );
@@ -67,14 +78,16 @@ class Cliente {
 		return mensaje;
 	}
 
-	public void escritura( String mensaje ){
+	public void escritura( String mensaje, Boolean escrito ){
 
 		try {
 		
 			OutputStream output = conexion.getOutputStream();
 			DataOutputStream dataOutput = new DataOutputStream( output );
 			dataOutput.writeUTF( mensaje );
-			System.out.println(mensaje);
+			if(escrito) {
+				System.out.println(mensaje);
+			}
 		}catch( Exception e ) {
 
 			System.out.println( e.getMessage() );
@@ -83,8 +96,18 @@ class Cliente {
 
 	public static void main(String[] arg) {
 		
-		Cliente cliente = new Cliente();
-		cliente.realizarConexion();
-		cliente.interaccion();
+		try {
+				
+			Cliente cliente = new Cliente();
+			cliente.realizarConexion();
+			cliente.interaccion();
+
+			cliente.conexion.close();
+			
+		
+		}catch( Exception e ) {
+
+			System.out.println( e.getMessage() );
+		}
 	}
 }

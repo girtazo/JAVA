@@ -15,9 +15,7 @@ class Butaca {
 		this.numero 	= numero;
 		this.precio 	= precio;
 		this.ocupada 	=  false;
-
 	}
-
 }
 
 class Servidor {
@@ -48,12 +46,12 @@ class Servidor {
 			this.socketServer = new ServerSocket( PUERTO );
 
 			// Asignar Cantidad de butacas
-			cenButacasLibres 	= 54;
-			lat1ButacasLibres 	= 4;
-			lat2ButacasLibres 	= 4;
-			galButacasLibres 	= 8;
-			vip1ButacasLibres 	= 3;
-			vip2ButacasLibres 	= 3;
+			this.cenButacasLibres 	= 54;
+			this.lat1ButacasLibres 	= 4;
+			this.lat2ButacasLibres 	= 4;
+			this.galButacasLibres 	= 8;
+			this.vip1ButacasLibres 	= 3;
+			this.vip2ButacasLibres 	= 3;
 
 			// Preparar Arrays
 			this.cenButacas 	= new Butaca[cenButacasLibres];
@@ -66,54 +64,57 @@ class Servidor {
 			for( int n = 0; n < cenButacasLibres; n++ ) { 
 
 				cenButacas[n] = new Butaca( "CEN", n, 80 );
-
 			}
 
 			for( int n = 0; n < lat1ButacasLibres; n++ ) { 
 
 				lat1Butacas[n] = new Butaca( "LAT1", n, 100 );
-
 			}			
 
 			for( int n = 0; n < lat2ButacasLibres; n++ ) { 
 
 				lat2Butacas[n] = new Butaca( "LAT2", n, 100 );
-
 			}
 			
 			for( int n = 0; n < galButacasLibres; n++ ) { 
 
 				galButacas[n] = new Butaca( "GAL", n, 150 );
-
 			}
 
 			for( int n = 0; n < vip1ButacasLibres; n++ ) { 
 
 				vip1Butacas[n] = new Butaca( "VIP1", n, 250 );
-
 			}
 
 			for( int n = 0; n < vip2ButacasLibres; n++ ) { 
 
 				vip2Butacas[n] = new Butaca( "VIP2", n, 250 );
-
 			}
 
 			// Mensajes del servidor
 			mensajes[0] = "Esperando conexión...";
 			mensajes[1] = "Conectado.";
 			mensajes[2] = "Hola, soy el servidor.";
-			mensajes[3] = "Elige una opcion:\n";
-			mensajes[3] += "Reserva (tipoButaca) (númeroButaca)\n";
-			mensajes[3] += "Ver Butacas\n";
-			mensajes[3] += "Fin\n";
+			mensajes[3] = "\n\n--------------------------------------\n";
+			mensajes[3] += "Opciones\n";
+			mensajes[3] += "--------------------------------------\n";
+			mensajes[3] += "Reservar butaca: \"CEN\"\n";
+			mensajes[3] += "Informacion de butacas: \"Ver Butacas\"\n";
+			mensajes[3] += "Desconectar Sesion: \"Fin\"\n";
+			mensajes[3] += "--------------------------------------\n";
+			mensajes[3] += "Elige una opcion:";
 			mensajes[4] =  "Hasta luego";
 
 		} catch( Exception e ) {
 
 			System.out.println( e.getMessage() );
-
 		}
+	}
+	public static void main( String[] arg ) {
+		
+		Servidor servidor = new Servidor();
+
+		servidor.listen();
 	}
 	public void listen() {
 
@@ -131,17 +132,18 @@ class Servidor {
 				if( ! lectura().equalsIgnoreCase( "Hola" ) ) {
 
 					conexion.close();
-
 				}
+				mensaje = "";
+				escritura( mensajes[2]);
 
-				escritura(mensajes[2]);
+				// Recibir ordenes
 				while(true){
 
-					escritura(mensajes[3]);
-					
+					// Menu
+					escritura( mensajes[3] );
+					mensaje = lectura();
 
-
-					if( lectura() == "Ver Butacas" ) {
+					if( mensaje.equalsIgnoreCase( "Ver Butacas" ) ) {
 
 						mensaje = "Butacas de tipo CEN hay "+cenButacasLibres+" libres con un precio de "+ cenButacas[1].precio +"€\n";
 						mensaje += "Butacas de tipo LAT1 hay "+lat1ButacasLibres+" libres con un precio de "+ lat1Butacas[1].precio +"€\n";
@@ -149,12 +151,85 @@ class Servidor {
 						mensaje += "Butacas de tipo GAL hay "+galButacasLibres+" libres con un precio de "+ galButacas[1].precio +"€\n";
 						mensaje += "Butacas de tipo VIP1 hay "+vip1ButacasLibres+" libres con un precio de "+ vip1Butacas[1].precio +"€\n";
 						mensaje += "Butacas de tipo VIP2 hay "+vip2ButacasLibres+" libres con un precio de "+ vip2Butacas[1].precio +"€\n";
+					} else if(  mensaje.equalsIgnoreCase("CEN")){
+
+						if( cenButacasLibres > 0 ){
+
+							cenButacas[cenButacasLibres-1].ocupada = true;
+							cenButacasLibres = cenButacasLibres -1;
+							mensaje = "Reserva CEN numero de butaca: "+cenButacasLibres;
+						} else {
+
+							mensaje = "No quedan mas butacas de ese tipo, perdone las molestias";
+						}
+					} else if( mensaje.equalsIgnoreCase("GAL") ){
+
+						if( galButacasLibres > 0 ){
+
+							galButacas[galButacasLibres-1].ocupada = true;
+							galButacasLibres = galButacasLibres -1;
+							mensaje = "Reserva GAL numero: "+galButacasLibres;
+						} else {
+
+							mensaje = "No quedan mas butacas de ese tipo, perdone las molestias";
+						}
+					} else if( mensaje.equalsIgnoreCase("LAT1") ){
+						
+						if( lat1ButacasLibres > 0 ){
+
+							lat1Butacas[lat1ButacasLibres-1].ocupada = true;
+							lat1ButacasLibres = lat1ButacasLibres -1;
+							mensaje = "Reserva LAT1 numero: "+lat1ButacasLibres;
+						} else {
+
+							mensaje = "No quedan mas butacas de ese tipo, perdone las molestias";
+						}
+					} else if( mensaje.equalsIgnoreCase("LAT2") ){
+						
+						if( lat2ButacasLibres > 0 ){
+							
+							lat2Butacas[lat2ButacasLibres-1].ocupada = true;
+							lat2ButacasLibres = lat2ButacasLibres -1;
+							mensaje = "Reserva LAT2 numero: "+lat2ButacasLibres;
+						} else {
+
+							mensaje = "No quedan mas butacas de ese tipo, perdone las molestias";
+						}
+					} else if( mensaje.equalsIgnoreCase("VIP1") ){
+						
+						if( vip1ButacasLibres > 0 ){
+							
+							vip1Butacas[vip1ButacasLibres-1].ocupada = true;
+							vip1ButacasLibres = vip1ButacasLibres -1;
+							mensaje = "Reserva VIP1 numero: "+vip1ButacasLibres;
+						} else {
+
+							mensaje = "No quedan mas butacas de ese tipo, perdone las molestias";
+						}
+					} else if( mensaje.equalsIgnoreCase("VIP2") ){
+						
+						if( vip2ButacasLibres > 0 ){
+							
+							vip2Butacas[vip2ButacasLibres-1].ocupada = true;
+							vip2ButacasLibres = vip2ButacasLibres -1;
+							mensaje = "Reserva VIP2 numero: "+vip2ButacasLibres;
+						} else {
+
+							mensaje = "No quedan mas butacas de ese tipo, perdone las molestias";
+						}
+					} else if( mensaje.equalsIgnoreCase("Fin") ){
+
+						escritura("Fin");
+						break;
+					} else {
+
+						mensaje = "Error: No es ninguna opcion valida";
 					}
-
+					
+					//Enviar resultados
+					escritura(mensaje);
 				}
-
 			}
-
 		} catch( Exception e ) {
 
 			System.out.println( e.getMessage() );
@@ -261,14 +336,4 @@ class Servidor {
 	public void setVip2ButacasLibres(int butacas) {
 		this.vip2ButacasLibres = butacas;
 	}
-
-	public static void main( String[] arg ) {
-		
-		Servidor servidor = new Servidor();
-
-		servidor.listen();
-
-
-	}
-
 }
